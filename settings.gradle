@@ -1,0 +1,8 @@
+rootProject.name = 'tufun'
+include 'common', 'services:authorization-server', 'services:tufun-api-gateway', 'services:tufun-service-registry'
+include 'services:users-service'
+include 'services:comments-service'
+include 'services:medias-service'
+include 'services:posts-service'
+include 'services:feeds-service'
+include 'services:search-service'

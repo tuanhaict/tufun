@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: authorization-server
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: authorization-server
+server:
+  port: 8002
+keycloak:
+  auth-server-url: http://keycloak:8080/
+  realm: master
+  user-realm: tufun
+  credentials:
+    username: admin
+    password: admin
+    admin-id: admin-cli
+    admin-secret: V19K7aPRpWCjoqsTKEqjBfOJNrKTRetj
+    client-id: authorization-server
+    client-secret: tcLtsvltLOQ3gMf9JTgoyKQMZtDjejb5
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+

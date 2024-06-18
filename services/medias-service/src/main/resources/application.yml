@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: medias-service
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: medias-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+cloudinary:
+  cloud-name: ddiudyz6q
+  api-key: 329585949937736
+  api-secret: 7EbGo_VqXnh8QwjHr6Aap49W4Vg
+server:
+  port: 8006
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: medias-service
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

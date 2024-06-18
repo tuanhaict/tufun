@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: users-service
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: users-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  datasource:
+    url: jdbc:postgresql://postgres:5432/users
+    username: tuanha
+    password: tuanha
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: users-service
+server:
+  port: 8001
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

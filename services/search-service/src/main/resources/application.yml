@@ -1,0 +1,31 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:9092
+    consumer:
+      group-id: search-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  application:
+    name: search-service
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: localhost:9200
+  elasticsearch:
+    uris: http://localhost:9200
+
+server:
+  port: 8007
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: search-service
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

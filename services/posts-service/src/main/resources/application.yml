@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: posts-service
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: posts-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  datasource:
+    url: jdbc:postgresql://postgres:5432/posts
+    username: tuanha
+    password: tuanha
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: posts-service
+server:
+  port: 8008
+grpc:
+  server:
+    port: 9090
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

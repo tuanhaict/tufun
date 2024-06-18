@@ -1,0 +1,140 @@
+spring:
+  application:
+    name: tufun-api-gateway
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      routes:
+        - id: users-service
+          uri: lb://users-service
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/users
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+        - id: posts-service
+          uri: lb://posts-service
+          predicates:
+            - Path=/api/v1/posts/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/posts
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+        - id: feeds-service
+          uri: lb://feeds-service
+          predicates:
+            - Path=/api/v1/feeds/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/feeds
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+        - id: search-service
+          uri: lb://search-service
+          predicates:
+            - Path=/api/v1/search/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/search
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+        - id: medias-service
+          uri: lb://medias-service
+          predicates:
+            - Path=/api/v1/medias/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/medias
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+        - id: authorization-server
+          uri: lb://authorization-server
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - CustomGlobalFilter
+            - name: CircuitBreaker
+              args:
+                name: circuitBreakerInstance
+                fallbackUri: forward:/fallback/auth
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 4
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@KeyResolverConfiguration}"
+  redis:
+    host: redis
+    port: 6379
+server:
+  port: 8082
+keycloak:
+  url: keycloak
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8081/eureka
+  instance:
+    hostname: tufun-api-gateway
+tracing:
+  url: http://jaeger:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+resilience4j:
+  circuitbreaker:
+    instances:
+      circuitBreakerInstance:
+        slidingWindowSize: 10                     #unit request
+        permittedNumberOfCallsInHalfOpenState: 5  #unit request
+        failureRateThreshold: 50                  #percent
+        waitDurationInOpenState: 10000            #10 seconds
+        registerHealthIndicator: true
+  timelimiter:
+    instances:
+      circuitBreakerInstance:
+        timeoutDuration: 10s
+
+

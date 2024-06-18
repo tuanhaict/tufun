@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_package = "com.tuanha.tufun.common";
+option java_outer_classname = "PostServiceProto";
+
+import "google/protobuf/wrappers.proto";
+
+// Request message containing a list of user IDs
+message GetPostsByPostIdsRequest {
+    repeated string postIds =1;
+    string user_id =2;
+}
+
+// Response message for a single post
+message PostResponse {
+    string id = 1;
+    string content = 2;
+    string user_id = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string avatar = 6;
+    string url =7;
+    int32 comments =8;
+    int32 likes =9;
+}
+
+// Response message containing a list of posts
+message GetPostsByUserIdsResponse {
+    repeated PostResponse posts = 1;
+}
+
+// Service definition
+service PostService {
+    rpc GetPostsByUserIds (GetPostsByPostIdsRequest) returns (GetPostsByUserIdsResponse);
+}
